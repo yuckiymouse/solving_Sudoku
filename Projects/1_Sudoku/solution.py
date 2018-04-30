@@ -71,6 +71,29 @@ def naked_twins(values):
     strategy repeatedly).
     """
     # TODO: Implement this function!
+    
+    for unit in unitlist:
+        
+        # 配置される可能性のある数字が重複しているboxをsquare単位で探す　http://www.sudokudragon.com/sudokustrategy.htm
+        # squareをリストにする
+        square_list = [values[square] for square in unit]
+        
+        # 同じ数字がsquare_listの中にあるかどうか
+        # twinだから、同じ二種類の数字を持つかどうか、2回登場するかどうか確認する
+        #  .count returns count of how many times obj occurs in list
+        
+        same_numbers = [i for i in range(0, len(square_list)) 
+                        if square_list.count(square_list[i]) == 2 and len(square_list) == 2]
+        
+        
+        # もし、上記の条件に該当するペアがあった場合
+        if len(same_numbers) == 2:
+            value = square_list[same_numbers[0]]
+            
+            list_values = list(square_list[same_numbers[0]])
+        
+    
+    
     raise NotImplementedError
 
 
