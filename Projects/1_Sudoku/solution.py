@@ -8,13 +8,19 @@ square_units = [cross(rs, cs) for rs in ('ABC','DEF','GHI') for cs in ('123','45
 unitlist = row_units + column_units + square_units
 
 # TODO: Update the unit list to add the new diagonal units
+
+# left
 diagonal_lr = [rows[i] + cols[i] for i in range(len(rows))]
+
+# right .....reverse index ([9, 8, 7, 6, 5, 4, 3, 2, 1, 0])
+# 最後から数えて、変量は１
 rcols = cols[::-1]
+
+# loopはindex 8から-1までで、変量は-1 
+# (ex. for x in range(0, 10, 2): print x **result** 0, 2, 3, 6, 8で、10は含まない。10まで、ということ。）
 diagonal_rl = [rows[i] + rcols[i] for i in range(len(rows) -1, -1, -1)]
 unitlist.append(diagonal_lr)
 unitlist.append(diagonal_rl)
-
-
 
 
 # 二本の対角線をunitlistに追加する
@@ -22,12 +28,10 @@ unitlist.append(diagonal_rl)
 # left_diagonal = [A1B2C3D4E5F6G7H8I9]
 
 # right_diagnal = [A9B8C7D6E5F4G3H2I1]
-
-
 # unitlist = unitlist.append(left_diagonal)
 
 #上書き
-# unitlist = unitlist.append(right_diagnal)
+# unitlist.append(right_diagnal)
 
 # Must be called after all units (including diagonals) are added to the unitlist
 units = extract_units(unitlist, boxes)
