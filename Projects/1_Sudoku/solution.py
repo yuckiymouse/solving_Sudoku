@@ -1,14 +1,10 @@
-
 from utils import *
-
-
 row_units = [cross(r, cols) for r in rows]
 column_units = [cross(rows, c) for c in cols]
 square_units = [cross(rs, cs) for rs in ('ABC','DEF','GHI') for cs in ('123','456','789')]
 unitlist = row_units + column_units + square_units
 
 # TODO: Update the unit list to add the new diagonal units
-
 # left
 diagonal_lr = [rows[i] + cols[i] for i in range(len(rows))]
 
@@ -21,17 +17,6 @@ rcols = cols[::-1]
 diagonal_rl = [rows[i] + rcols[i] for i in range(len(rows) -1, -1, -1)]
 unitlist.append(diagonal_lr)
 unitlist.append(diagonal_rl)
-
-
-# 二本の対角線をunitlistに追加する
-# left diagnal units = A1, B2, C3, ..... I9
-# left_diagonal = [A1B2C3D4E5F6G7H8I9]
-
-# right_diagnal = [A9B8C7D6E5F4G3H2I1]
-# unitlist = unitlist.append(left_diagonal)
-
-#上書き
-# unitlist.append(right_diagnal)
 
 # Must be called after all units (including diagonals) are added to the unitlist
 units = extract_units(unitlist, boxes)
@@ -71,27 +56,48 @@ def naked_twins(values):
     strategy repeatedly).
     """
     # TODO: Implement this function!
-    
+    # iterate through each unit list:
     for unit in unitlist:
-        
-        # 配置される可能性のある数字が重複しているboxをsquare単位で探す　http://www.sudokudragon.com/sudokustrategy.htm
-        # squareをリストにする
-        square_list = [values[square] for square in unit]
-        
-        # 同じ数字がsquare_listの中にあるかどうか
-        # twinだから、同じ二種類の数字を持つかどうか、2回登場するかどうか確認する
-        #  .count returns count of how many times obj occurs in list
-        
-        same_numbers = [i for i in range(0, len(square_list)) 
-                        if square_list.count(square_list[i]) == 2 and len(square_list) == 2]
+        # check if any value for a square in the list is equal to any other value
+        # make a list of values in the squares
+        val_list = [values[square] for square in unit]
         
         
-        # もし、上記の条件に該当するペアがあった場合
-        if len(same_numbers) == 2:
-            value = square_list[same_numbers[0]]
-            
-            list_values = list(square_list[same_numbers[0]])
-        
+        print(val_list)
+       
+
+        # find all duplicate values in that list that could be naked twins
+        # criteria are 1) the number appears exactly twice in val_list and
+        # 2) the number is 2 digits long
+        nt_dupes_index = [i for i in range(0, len(val_list)) if
+                    val_list.count(val_list[i]) == 2  and len(val_list[i]) == 2]
+
+        # if there is at least one pair of naked twins
+        if len(nt_dupes_index) == 2:
+            # create a variable for the nt value
+            nt_value = val_list[nt_dupes_index[0]]
+            # turn the two values into a list
+            nt_list_values = list(val_list[nt_dupes_index[0]])
+            # iterate through the val_list to find common digits
+            idx = 0
+            for v in val_list:
+                if len(v) > 1 and v != nt_value:
+                    v_list = list(v)
+                    found_nt_vals = [j for j in v_list if j in nt_list_values]
+                    # if nt numbers found in value, replace it in the values dict
+                    if len(found_nt_vals) > 0:
+                        for k in found_nt_vals:
+                            values[unit[idx]] = values[unit[idx]].replace(k, "")
+                idx += 1
+
+
+        # no naked twin pairs found
+        else:
+            continue
+    return (values)
+    
+    
+    
     
     
     raise NotImplementedError
@@ -177,6 +183,8 @@ def reduce_puzzle(values):
     while not stalled:
         #check how many boxes have a determined value
         solved_values_before = len([box for box in values.key() if len(values[box]) == 1])
+        
+        print(values.key())
         
         #use eliminate strategy
         values = eliminate(values)
@@ -274,3 +282,4 @@ if __name__ == "__main__":
         pass
     except:
         print('We could not visualize your board due to a pygame issue. Not a problem! It is not a requirement.')
+
