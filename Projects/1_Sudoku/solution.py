@@ -93,13 +93,6 @@ def naked_twins(values):
         else:
             continue
     return (values)
-    
-    
-    
-    
-    
-    raise NotImplementedError
-
 
 def eliminate(values):
     """Apply the eliminate strategy to a Sudoku puzzle
@@ -124,8 +117,6 @@ def eliminate(values):
         for peer in peers[box]:
             values[peer] = values[peer].replace(digits, '')
     return values
-    raise NotImplementedError
-
 
 def only_choice(values):
     """Apply the only choice strategy to a Sudoku puzzle
@@ -155,9 +146,6 @@ def only_choice(values):
                 values[dplaces[0]] = digit
     return values
     
-    raise NotImplementedError
-
-
 def reduce_puzzle(values):
     """Reduce a Sudoku puzzle by repeatedly applying all constraint strategies
 
@@ -194,10 +182,7 @@ def reduce_puzzle(values):
         if len([box for box in values.keys() if len(values[box]) == 0]):
             return False
     return values
-    
-    raise NotImplementedError
-
-
+   
 def search(values):
     """Apply depth first search to solve Sudoku puzzles in order to solve puzzles
     that cannot be solved by repeated reduction alone.
@@ -236,8 +221,6 @@ def search(values):
         if attempt:
             return naked_twins(attempt)
    
-      
-
 
 def solve(grid):
     """Find the solution to a Sudoku puzzle using search and constraint propagation
