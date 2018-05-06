@@ -1,4 +1,6 @@
 from utils import *
+
+
 row_units = [cross(r, cols) for r in rows]
 column_units = [cross(rows, c) for c in cols]
 square_units = [cross(rs, cs) for rs in ('ABC','DEF','GHI') for cs in ('123','456','789')]
@@ -21,6 +23,7 @@ unitlist.append(diagonal_rl)
 # Must be called after all units (including diagonals) are added to the unitlist
 units = extract_units(unitlist, boxes)
 peers = extract_peers(units, boxes)
+
 
 def naked_twins(values):
     """Eliminate values using the naked twins strategy.
@@ -60,6 +63,7 @@ def naked_twins(values):
         # check if any value for a square in the list is equal to any other value
         # make a list of values in the squares
         val_list = [values[square] for square in unit]
+       
         # find all duplicate values in that list that could be naked twins
         # criteria are 1) the number appears exactly twice in val_list and
         # 2) the number is 2 digits long
@@ -88,8 +92,14 @@ def naked_twins(values):
         # no naked twin pairs found
         else:
             continue
-    return (values)   
+    return (values)
+    
+    
+    
+    
+    
     raise NotImplementedError
+
 
 def eliminate(values):
     """Apply the eliminate strategy to a Sudoku puzzle
@@ -224,10 +234,9 @@ def search(values):
         new_sudoku[s] = value
         attempt = search(new_sudoku)
         if attempt:
-            return attempt
-    
-    
-    raise NotImplementedError
+            return naked_twins(attempt)
+   
+      
 
 
 def solve(grid):
