@@ -22,7 +22,6 @@ unitlist.append(diagonal_rl)
 units = extract_units(unitlist, boxes)
 peers = extract_peers(units, boxes)
 
-
 def naked_twins(values):
     """Eliminate values using the naked twins strategy.
 
@@ -61,11 +60,6 @@ def naked_twins(values):
         # check if any value for a square in the list is equal to any other value
         # make a list of values in the squares
         val_list = [values[square] for square in unit]
-        
-        
-        print(val_list)
-       
-
         # find all duplicate values in that list that could be naked twins
         # criteria are 1) the number appears exactly twice in val_list and
         # 2) the number is 2 digits long
@@ -94,14 +88,8 @@ def naked_twins(values):
         # no naked twin pairs found
         else:
             continue
-    return (values)
-    
-    
-    
-    
-    
+    return (values)   
     raise NotImplementedError
-
 
 def eliminate(values):
     """Apply the eliminate strategy to a Sudoku puzzle
@@ -120,16 +108,12 @@ def eliminate(values):
         The values dictionary with the assigned values eliminated from peers
     """
     # TODO: Copy your code from the classroom to complete this function
-    solved_values = [box for box in values.key() if len(values[box]) == 1]
+    solved_values = [box for box in values.keys() if len(values[box]) == 1]
     for box in solved_values:
         digits = values[box]
         for peer in peers[box]:
-            values[peer] = values[peer].replace(digit, '')
+            values[peer] = values[peer].replace(digits, '')
     return values
-        
-    
-    
-    
     raise NotImplementedError
 
 
@@ -182,9 +166,7 @@ def reduce_puzzle(values):
     stalled = False
     while not stalled:
         #check how many boxes have a determined value
-        solved_values_before = len([box for box in values.key() if len(values[box]) == 1])
-        
-        print(values.key())
+        solved_values_before = len([box for box in values.keys() if len(values[box]) == 1])
         
         #use eliminate strategy
         values = eliminate(values)
@@ -193,13 +175,13 @@ def reduce_puzzle(values):
         values = only_choice(values)
         
         #check how many boxes have a determined value
-        solved_values_after = len([box for box in values.key() if len(values[box]) == 1])
+        solved_values_after = len([box for box in values.keys() if len(values[box]) == 1])
         
         # if no new values were added, stop the loop
         stalled = solved_values_before == solved_values_after
         
         #sanity check, return False if there is a box with zero available values
-        if len([box for box in values.key() if len(values[box]) == 0]):
+        if len([box for box in values.keys() if len(values[box]) == 0]):
             return False
     return values
     
@@ -237,11 +219,11 @@ def search(values):
     n,s = min((len(values[s]), s) for s in boxes if len(values[s]) > 1)
     
     # use recurrence to solve each one of the resulting sudokus
-    for values in values[s]:
+    for value in values[s]:
         new_sudoku = values.copy()
         new_sudoku[s] = value
         attempt = search(new_sudoku)
-        if attemp:
+        if attempt:
             return attempt
     
     
@@ -282,4 +264,3 @@ if __name__ == "__main__":
         pass
     except:
         print('We could not visualize your board due to a pygame issue. Not a problem! It is not a requirement.')
-
